@@ -76,6 +76,6 @@ export class ContactsController {
         if (index === -1)
             throw new NotFoundException();
 
-        let deleted = this.contacts.splice(index, 1);
+        this.contacts.splice(index, 1);
     }
 }
