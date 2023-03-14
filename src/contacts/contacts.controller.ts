@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, Put } from '@nestjs/common';
 
 @Controller('contacts')
 export class ContactsController {
@@ -21,12 +21,12 @@ export class ContactsController {
         if (!c)
             throw new NotFoundException();
 
-        return {...c};
+        return { ...c };
     }
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createContacts(@Body() body){
+    create(@Body() body) {
         let ids = this.contacts.map(x => x.id);
         let newId = 1 + Math.max(...ids);
 
@@ -43,16 +43,39 @@ export class ContactsController {
         }
     }
 
+    @HttpCode(HttpStatus.NO_CONTENT)
     @Put('/:id')
-    updateContact(@Param("id") id, @Body() contact){
-        
+    update(@Param("id") id, @Body() contact) {
+
         let index = this.contacts.findIndex(c => c.id == id);
 
-        if (index===-1)
-            throw new NotFoundException();            
+        if (index === -1)
+            throw new NotFoundException();
 
         contact.id = parseInt(id);
         this.contacts[index] = contact;
-        return contact;
+    }
+
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Patch('/:id')
+    partialUpdate(@Param("id") id, @Body() contact) {
+
+        let index = this.contacts.findIndex(c => c.id == id);
+
+        if (index === -1)
+            throw new NotFoundException();
+
+        this.contacts[index] = { ...this.contacts[index], ...contact }
+    }
+
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Delete('/:id')
+    deleteContact(@Param('id') id) {
+        let index = this.contacts.findIndex(c => c.id == id);
+
+        if (index === -1)
+            throw new NotFoundException();
+
+        let deleted = this.contacts.splice(index, 1);
     }
 }
