@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Stephan",
+        "email": "sfspacov@gmail.com",
+        "id": 1
+    },
+    {
+        "name": "Antony Kieds",
+        "email": "vocal@rhcp.com",
+        "id": 3
+    },
+    {
+        "name": "Flea",
+        "email": "bass@rhcp.com",
+        "id": 4
+    },
+    {
+        "name": "Marvin Gaye",
+        "email": "marvin@music.com",
+        "id": 5
+    },
+    {
+        "name": "Mick Jagger",
+        "email": "sir.mick@music.com",
+        "id": 6
+    },
+    {
+        "name": "Paul Mc",
+        "email": "paul@beatles.com",
+        "id": 7
+    }
+]
