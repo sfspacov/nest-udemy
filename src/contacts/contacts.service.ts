@@ -34,7 +34,7 @@ export class ContactsService {
         this.writeToFile();
     }
     getAll() {
-        return [...this.contacts];
+        return [...this.contacts].sort((a,b) => a.id - b.id)
     }
 
     getById(id) {
