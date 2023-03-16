@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query, UsePipes } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 
 @Controller('contacts')
@@ -23,7 +23,8 @@ export class ContactsController {
     }
 
     @Get('/:id')
-    getById(@Param("id", ParseIntPipe) id: Number) {
+    @UsePipes(ParseIntPipe)
+    getById(@Param("id") id: Number) {
         if (this.service.exists(id)) 
             return this.service.getById(id);
         
@@ -32,7 +33,7 @@ export class ContactsController {
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put('/:id')
-    update(@Param("id") id, @Body() contact) {
+    update(@Param("id", ParseIntPipe) id: Number, @Body() contact) {
         if (this.service.exists(id)) {
             this.service.replace(id, contact);
             return;
@@ -42,7 +43,7 @@ export class ContactsController {
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Patch('/:id')
-    partialUpdate(@Param("id") id, @Body() contact) {
+    partialUpdate(@Param("id", ParseIntPipe) id: Number, @Body() contact) {
         if (this.service.exists(id)) {
             this.service.update(id, contact);
             return;

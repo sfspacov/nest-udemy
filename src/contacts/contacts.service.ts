@@ -15,20 +15,20 @@ export class ContactsService {
     }
 
     replace(id, contact) {
-        let index = this.contacts.findIndex(c => c.id == id);
+        let index = this.contacts.findIndex(c => c.id === id);
         contact.id = parseInt(id);
         this.contacts[index] = contact;
         this.writeToFile();
     }
 
     update(id, contact) {
-        let index = this.contacts.findIndex(c => c.id == id);
+        let index = this.contacts.findIndex(c => c.id === id);
         this.contacts[index] = { ...this.contacts[index], ...contact }
         this.writeToFile();
     }
 
     delete(id) {
-        let index = this.contacts.findIndex(c => c.id == id);
+        let index = this.contacts.findIndex(c => c.id === id);
 
         this.contacts.splice(index, 1);
         this.writeToFile();
