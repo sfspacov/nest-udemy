@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 
 @Controller('contacts')
@@ -18,7 +18,7 @@ export class ContactsController {
     }
 
     @Get()
-    getAll() {
+    getAll(@Query('_page', new DefaultValuePipe(1), ParseIntPipe) page, @Query('_limit', new DefaultValuePipe(10), ParseIntPipe) limit) {
         return this.service.getAll();
     }
 
