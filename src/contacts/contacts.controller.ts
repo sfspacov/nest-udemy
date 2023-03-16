@@ -1,4 +1,5 @@
 import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query, UsePipes } from '@nestjs/common';
+import { MandatoryFieldsPipe } from 'src/mandatory-fields.pipe';
 import { ContactsService } from './contacts.service';
 
 @Controller('contacts')
@@ -9,7 +10,7 @@ export class ContactsController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    create(@Body() body) {
+    create(@Body(new MandatoryFieldsPipe(['name','email','phone'])) body) {
         if (body instanceof Array) {
             return this.service.addManyContacts(body);
         } else {

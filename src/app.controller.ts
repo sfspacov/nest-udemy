@@ -3,10 +3,19 @@ import { AppService } from './app.service';
 import * as fs from 'fs';
 import { FileNotFoundException } from './file-not-found.exceptions';
 import { MyCustomExceptionFilter } from './my-custom-exception.filter';
+import { Query, UsePipes } from '@nestjs/common/decorators';
+import { UppercasePipe } from './uppercase/uppercase.pipe';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) { }
+
+  @Get('/q')
+  @UsePipes(UppercasePipe)
+  query(@Query('city') city, @Query('state')state, @Query('country')country) {
+
+    return { city, state, country }
+  }
 
   @Get('/hello')
   @UseFilters(MyCustomExceptionFilter)
