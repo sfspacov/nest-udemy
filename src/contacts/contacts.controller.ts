@@ -1,4 +1,5 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query, UsePipes } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Contact } from 'src/contact/contact';
 import { MandatoryFieldsPipe } from 'src/mandatory-fields.pipe';
 import { ContactsService } from './contacts.service';
 
@@ -34,7 +35,8 @@ export class ContactsController {
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put('/:id')
-    update(@Param("id", ParseIntPipe) id: Number, @Body() contact) {
+    @UsePipes(ValidationPipe)
+    update(@Param("id", ParseIntPipe) id: Number, @Body() contact: Contact) {
         if (this.service.exists(id)) {
             this.service.replace(id, contact);
             return;
