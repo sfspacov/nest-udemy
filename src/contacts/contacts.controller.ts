@@ -9,7 +9,7 @@ export class ContactsController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    addOneContact(@Body() body) {
+    create(@Body() body) {
         if (body instanceof Array) {
             return this.service.addManyContacts(body);
         } else {
@@ -49,17 +49,15 @@ export class ContactsController {
             return;
         }
         throw new NotFoundException();
-
     }
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Delete('/:id')
-    deleteContact(@Param('id') id) {
+    delete(@Param('id') id) {
         if (this.service.exists(id)) {
             this.service.delete(id);
             return;
         }
-        throw new NotFoundException();
-        
+        throw new NotFoundException();        
     }
 }
