@@ -37,15 +37,15 @@ export class ContactsService {
         return [...this.contacts].sort((a,b) => a.id - b.id)
     }
 
-    getById(id) {
-        return this.contacts.find(x => x.id == id);
+    getById(id: Number) {
+        return this.contacts.find(x => x.id === id);
     }
 
     writeToFile() {
         fs.writeFileSync(filename, JSON.stringify(this.contacts), 'utf-8')
     }
 
-    exists = (id) => this.contacts.findIndex(c => c.id == id) != -1;
+    exists = (id) => this.contacts.findIndex(c => c.id === id) != -1;
 
     get nextId() {
         if (this.contacts.length === 0) return 1;

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 
 @Controller('contacts')
@@ -23,10 +23,10 @@ export class ContactsController {
     }
 
     @Get('/:id')
-    getById(@Param("id") id) {
-        if (this.service.exists(id)) {
+    getById(@Param("id", ParseIntPipe) id: Number) {
+        if (this.service.exists(id)) 
             return this.service.getById(id);
-        }
+        
         throw new NotFoundException();
     }
 
