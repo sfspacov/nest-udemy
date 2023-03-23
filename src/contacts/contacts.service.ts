@@ -17,14 +17,12 @@ export class ContactsService {
         }
     }
 
-    replace(id, contact) {
-        let index = this.contacts.findIndex(c => c.id === id);
-        contact.id = parseInt(id);
-        this.contacts[index] = contact;
-        this.writeToFile();
+    async replace(id, contact) {
+        await this.ContactModel.updateOne({ _id: id }, contact);
+        
     }
 
-    update(id, contact) {
+    update(id: string, contact: Contact) {
         let index = this.contacts.findIndex(c => c.id === id);
         this.contacts[index] = { ...this.contacts[index], ...contact }
         this.writeToFile();
@@ -37,7 +35,7 @@ export class ContactsService {
         this.writeToFile();
     }
     getAll(page: number, limit: number) {
-        return this.ContactModel.find().limit(limit).skip((page-1)*limit);
+        return this.ContactModel.find().limit(limit).skip((page - 1) * limit);
     }
 
     async getById(id: string) {

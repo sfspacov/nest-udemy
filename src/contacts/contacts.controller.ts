@@ -1,4 +1,4 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, DefaultValuePipe, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MandatoryFieldsPipe } from 'src/mandatory-fields.pipe';
 import { Contact } from './contact.schema';
 import { ContactsService } from './contacts.service';
@@ -47,18 +47,18 @@ export class ContactsController {
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Put('/:id')
-    @UsePipes(ValidationPipe)
-    update(@Param("id", ParseIntPipe) id: Number, @Body() contact: Contact) {
-        if (this.service.exists(id)) {
-            this.service.replace(id, contact);
-            return;
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async updateMongo(@Param('id') id: string, @Body() contact: Contact) {
+        try {
+            await this.service.replace(id, contact);
+        } catch (error) {
+            throw new BadRequestException();
         }
-        throw new NotFoundException();
     }
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Patch('/:id')
-    partialUpdate(@Param("id", ParseIntPipe) id: Number, @Body() contact) {
+    partialUpdate(id: string, @Body() contact) {
         if (this.service.exists(id)) {
             this.service.update(id, contact);
             return;
