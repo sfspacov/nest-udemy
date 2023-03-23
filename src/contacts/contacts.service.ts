@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as fs from 'fs'
+import { Model } from 'mongoose';
+import { Contact } from './contact.schema';
 
 const filename = './contacts.json'
 @Injectable()
 export class ContactsService {
     contacts = [];
-    constructor() {
+    constructor(@InjectModel('Contact') private ContactModel: Model<Contact>) {
         try {
             let content = fs.readFileSync(filename, 'utf-8')
             this.contacts = JSON.parse(content);
@@ -33,19 +36,19 @@ export class ContactsService {
         this.contacts.splice(index, 1);
         this.writeToFile();
     }
-    getAll() {
-        return [...this.contacts].sort((a,b) => a.id - b.id)
+    getAll(page: number, limit: number) {
+        return this.ContactModel.find().limit(limit).skip((page-1)*limit);
     }
 
-    getById(id: Number) {
-        return this.contacts.find(x => x.id === id);
+    async getById(id: string) {
+        return await this.ContactModel.findById(id);
     }
 
     writeToFile() {
         fs.writeFileSync(filename, JSON.stringify(this.contacts), 'utf-8')
     }
 
-    exists = (id) => this.contacts.findIndex(c => c.id === id) != -1;
+    exists = (id) => this.ContactModel.exists(id);
 
     get nextId() {
         if (this.contacts.length === 0) return 1;
@@ -53,11 +56,10 @@ export class ContactsService {
         return 1 + Math.max(...ids);
     }
 
-    addOneContact(contact) {
-        contact.id = this.nextId;
-        this.contacts.push(contact);
-        this.writeToFile();
-        return contact;
+    addOneContact(contact: Contact) {
+        let c = new this.ContactModel({ ...contact })
+        c.save();
+        return c;
     }
 
     addManyContacts(contacts) {

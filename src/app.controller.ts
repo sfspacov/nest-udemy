@@ -6,7 +6,7 @@ import { MyCustomExceptionFilter } from './my-custom-exception.filter';
 import { Query, UsePipes } from '@nestjs/common/decorators';
 import { UppercasePipe } from './uppercase/uppercase.pipe';
 
-@Controller()
+@Controller('default')
 export class AppController {
   constructor(private readonly appService: AppService) { }
 

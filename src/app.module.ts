@@ -5,9 +5,10 @@ import { ContactsController } from './contacts/contacts.controller';
 import { ContactsModule } from './contacts/contacts.module';
 import { enableCors } from './cors.middleware';
 import { LoggerMiddleware } from './logger.middleware';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [ContactsModule],
+  imports: [ContactsModule, MongooseModule.forRoot('mongodb://127.0.0.1:27017/test')],
   controllers: [AppController],
   providers: [AppService],
 })
