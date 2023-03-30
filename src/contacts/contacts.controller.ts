@@ -68,11 +68,10 @@ export class ContactsController {
 
     @HttpCode(HttpStatus.NO_CONTENT)
     @Delete('/:id')
-    delete(@Param('id') id) {
-        if (this.service.exists(id)) {
-            this.service.delete(id);
-            return;
+    async delete(@Param('id') id) {
+        let ret = await this.service.delete(id);
+        if (ret.deletedCount === 0) {
+            throw new NotFoundException();
         }
-        throw new NotFoundException();
     }
 }

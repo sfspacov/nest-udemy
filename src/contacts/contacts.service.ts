@@ -19,7 +19,7 @@ export class ContactsService {
 
     async replace(id, contact) {
         await this.ContactModel.updateOne({ _id: id }, contact);
-        
+
     }
 
     update(id: string, contact: Contact) {
@@ -28,11 +28,8 @@ export class ContactsService {
         this.writeToFile();
     }
 
-    delete(id) {
-        let index = this.contacts.findIndex(c => c.id === id);
-
-        this.contacts.splice(index, 1);
-        this.writeToFile();
+    delete(id: string) {
+        return this.ContactModel.deleteOne({ _id: id });
     }
     getAll(page: number, limit: number) {
         return this.ContactModel.find().limit(limit).skip((page - 1) * limit);
